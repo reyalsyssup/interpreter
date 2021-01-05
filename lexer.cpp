@@ -46,6 +46,10 @@ Token Lexer::getNextToken() {
             this->advance(1);
             return Token(MINUS, "-");
         }
+
+        // if we got here an error occured
+        std::cout << "Unexpected character '" << currentChar << "' at position: " << this->pos << std::endl;
+        exit(-1);
     }
 
     return Token(EOF, EOF);
