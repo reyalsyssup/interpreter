@@ -19,8 +19,15 @@ void Parser::eat(std::string type) {
 
 float Parser::term()  {
     Token tok = this->currentToken;
-    this->eat(INTEGER);
-    return std::stof(tok.value);
+    if(tok.type == INTEGER) {
+        this->eat(INTEGER);
+        return std::stof(tok.value);
+    } else {
+        this->eat(LPAREN);
+        float result = this->plusExpr();
+        this->eat(RPAREN);
+        return result;
+    }
 }
 
 float Parser::mulExpr() {
