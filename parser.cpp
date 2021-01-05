@@ -12,7 +12,7 @@ void Parser::eat(std::string type) {
     if(this->currentToken.type == type)
         this->currentToken = this->lexer.getNextToken();
     else {
-        std::cout << "Error in eat function" << std::endl;
+        std::cout << "Expected '" << type << "' got '" << this->currentToken.type << "'" << std::endl;
         exit(-1);
     }
 }
