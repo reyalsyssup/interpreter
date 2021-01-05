@@ -3,7 +3,7 @@
 #include <iostream>
 
 int main() {
-    Lexer lexer("1 2 3 4");
+    Lexer lexer("8+7-9+8");
     
     Token tok = lexer.getNextToken();
     while(true) {
