@@ -6,6 +6,7 @@
 
 int main() {
     while(true) {
+        std::cout << "calc> ";
         std::string input = "";
         getline(std::cin, input);
         if(input == "") continue;
