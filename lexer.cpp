@@ -46,6 +46,14 @@ Token Lexer::getNextToken() {
             this->advance(1);
             return Token(MINUS, "-");
         }
+        if(currentChar == '*') {
+            this->advance(1);
+            return Token(MUL, "*");
+        }
+        if(currentChar == '/') {
+            this->advance(1);
+            return Token(DIV, "/");
+        }
 
         // if we got here an error occured
         std::cout << "Unexpected character '" << currentChar << "' at position: " << this->pos << std::endl;
