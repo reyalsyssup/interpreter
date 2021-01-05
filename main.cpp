@@ -1,14 +1,10 @@
 #include "lexer.h"
 #include "types.h"
+#include "parser.h"
 #include <iostream>
 
 int main() {
-    Lexer lexer("8+7-9+8");
-    
-    Token tok = lexer.getNextToken();
-    while(true) {
-        std::cout << "Token(" << tok.type << ", " << tok.value << ")" << std::endl;
-        if(tok.type == EOF) break;
-        tok = lexer.getNextToken();
-    }
+    Lexer lexer("5-5+8-9");
+    Parser parser(lexer);
+    parser.parse();
 }
