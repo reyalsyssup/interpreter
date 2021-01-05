@@ -23,18 +23,35 @@ float Parser::term()  {
     return std::stof(tok.value);
 }
 
-float Parser::plusExpr() {
+float Parser::mulExpr() {
     float result = this->term();
+
+    while(this->currentToken.type == MUL || this->currentToken.type == DIV) {
+        Token tok = this->currentToken;
+        if(tok.type == MUL) {
+            this->eat(MUL);
+            result *= this->term();
+        }
+        else if(tok.type == DIV) {
+            this->eat(DIV);
+            result /= this->term();
+        }
+    }
+    return result;
+}
+
+float Parser::plusExpr() {
+    float result = this->mulExpr();
     
     while(this->currentToken.type == PLUS || this->currentToken.type == MINUS) {
         Token tok = this->currentToken;
         if(tok.type == PLUS) {
             this->eat(PLUS);
-            result += this->term();
+            result += this->mulExpr();
         }
         else if(tok.type == MINUS) {
             this->eat(MINUS);
-            result -= this->term();
+            result -= this->mulExpr();
         }
     }
     return result;

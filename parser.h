@@ -10,6 +10,7 @@ public:
 
     float term();
     float plusExpr();
+    float mulExpr();
 
     void parse();
 };
