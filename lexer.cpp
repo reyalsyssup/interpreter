@@ -37,6 +37,15 @@ Token Lexer::getNextToken() {
 
         if(isdigit(currentChar))
             return this->integer();
+
+        if(currentChar == '+') {
+            this->advance(1);
+            return Token(PLUS, "+");
+        }
+        if(currentChar == '-') {
+            this->advance(1);
+            return Token(MINUS, "-");
+        }
     }
 
     return Token(EOF, EOF);
