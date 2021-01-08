@@ -1,5 +1,6 @@
 #include "parser.h"
 #include "types.h"
+#include "AST.h"
 #include <string>
 #include <iostream>
 
@@ -17,54 +18,60 @@ void Parser::eat(std::string type) {
     }
 }
 
-float Parser::term()  {
+Node Parser::term()  {
     Token tok = this->currentToken;
     if(tok.type == INTEGER) {
         this->eat(INTEGER);
-        return std::stof(tok.value);
+        return Node(Num(tok));
     } else {
         this->eat(LPAREN);
-        float result = this->plusExpr();
+        Node node = this->plusExpr();
         this->eat(RPAREN);
-        return result;
+        return Node(node);
     }
 }
 
-float Parser::mulExpr() {
-    float result = this->term();
+Node Parser::mulExpr() {
+    Node node = this->term();
 
     while(this->currentToken.type == MUL || this->currentToken.type == DIV) {
         Token tok = this->currentToken;
-        if(tok.type == MUL) {
+        if(tok.type == MUL)
             this->eat(MUL);
-            result *= this->term();
-        }
-        else if(tok.type == DIV) {
+        else if(tok.type == DIV)
             this->eat(DIV);
-            result /= this->term();
-        }
+
+        // kinda scuffed but i need pointers until I find a better solution so I am storing nodes in an array
+        this->leftNodes.push_back(node);
+        this->rightNodes.push_back(this->term());
+        node = Node(BinOp(&this->leftNodes[this->leftNodes.size()-1], tok, &this->rightNodes[this->rightNodes.size()-1]));
+        std::cout << "[mulExpr()] : " << node.type << std::endl;
     }
-    return result;
+    return node;
 }
 
-float Parser::plusExpr() {
-    float result = this->mulExpr();
+Node Parser::plusExpr() {
+    Node node = this->mulExpr();
     
     while(this->currentToken.type == PLUS || this->currentToken.type == MINUS) {
         Token tok = this->currentToken;
-        if(tok.type == PLUS) {
+        if(tok.type == PLUS)
             this->eat(PLUS);
-            result += this->mulExpr();
-        }
-        else if(tok.type == MINUS) {
+        else if(tok.type == MINUS)
             this->eat(MINUS);
-            result -= this->mulExpr();
-        }
+
+        // kinda scuffed but i need pointers until I find a better solution so I am storing nodes in an array
+        this->leftNodes.push_back(node);
+        this->rightNodes.push_back(this->mulExpr());
+        node = Node(BinOp(&this->leftNodes[this->leftNodes.size()-1], tok, &this->rightNodes[this->rightNodes.size()-1]));
+        std::cout << "[plusExpr()] : " << node.type << std::endl;
     }
-    return result;
+    node.print();
+    return node;
 }
 
 void Parser::parse() {
-    float ans = this->plusExpr();
-    std::cout << this->lexer.text << " = " << ans << std::endl;
+    float ans = this->plusExpr().evaluate();
+    // std::cout << this->lexer.text << " = " << ans << std::endl;
+    // this->plusExpr().print();
 }
