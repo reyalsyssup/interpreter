@@ -1,43 +1,54 @@
 #pragma once
 
 #include "lexer.h"
-#include <iostream>
+#include "types.h"
+
+class Num;
+class BinOp;
+
+class Evaluable {
+public:
+    std::string type;
+    Num *numNode;
+    BinOp *binopNode;
+    Evaluable(Num *num): type("Num"), numNode(num) {};
+    Evaluable(BinOp *binop): type("BinOp"), binopNode(binop) {};
+    Evaluable() = default;
+};
 
 class Num {
 public:
     float value;
-
-    Num(Token token): value(std::stof(token.value)) {};
+    Num(Token tok): value(std::stof(tok.value)) {};
     Num() = default;
 
-    float evaluate();
-    std::string repr() { return "Num( " + std::to_string(this->value) + " )"; };
-    void print() { std::cout << this->repr() << std::endl; };
+    float evaluate() { return this->value; };
 };
-
-class Node;
 
 class BinOp {
 public:
-    Node *left, *right;
     Token op;
-    BinOp(Node *left, Token op, Node *right): left(left), op(op), right(right) {};
+    Evaluable left, right;
+    BinOp(Evaluable left, Token op, Evaluable right):
+        op(op), left(left), right(right) {};
     BinOp() = default;
 
-    float evaluate();
-    std::string repr();
-    void print() { std::cout << this->repr() << std::endl; };
-};
-
-class Node {
-public:
-    Num numNode;
-    BinOp binopNode;
-    std::string type = "";
-    Node(Num num): type("Num"), numNode(num) {};
-    Node(BinOp binop): type("BinOp"), binopNode(binop) {};
-
-    float evaluate();
-    std::string repr();
-    void print() { std::cout << this->repr() << std::endl; };
+    //will find a better spot for this later
+    static float evaluateNode(Evaluable eval) {
+        if(eval.type == "Num")
+            return eval.numNode->evaluate();
+        else
+            return eval.binopNode->evaluate();
+    }
+    
+    float evaluate() {
+        if(this->op.type == PLUS)
+            return this->evaluateNode(this->left) + this->evaluateNode(this->right);
+        if(this->op.type == MINUS)
+            return this->evaluateNode(this->left) - this->evaluateNode(this->right);
+        if(this->op.type == MUL)
+            return this->evaluateNode(this->left) * this->evaluateNode(this->right);
+        if(this->op.type == DIV)
+            return this->evaluateNode(this->left) / this->evaluateNode(this->right);
+    }
 };

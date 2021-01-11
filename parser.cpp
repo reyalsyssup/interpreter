@@ -18,21 +18,22 @@ void Parser::eat(std::string type) {
     }
 }
 
-Node Parser::term()  {
+Evaluable Parser::term()  {
     Token tok = this->currentToken;
     if(tok.type == INTEGER) {
         this->eat(INTEGER);
-        return Node(Num(tok));
+        Num *num = new Num(tok);
+        return Evaluable(num);
     } else {
         this->eat(LPAREN);
-        Node node = this->plusExpr();
+        Evaluable node = this->plusExpr();
         this->eat(RPAREN);
-        return Node(node);
+        return node;
     }
 }
 
-Node Parser::mulExpr() {
-    Node node = this->term();
+Evaluable Parser::mulExpr() {
+    Evaluable node = this->term();
 
     while(this->currentToken.type == MUL || this->currentToken.type == DIV) {
         Token tok = this->currentToken;
@@ -41,17 +42,14 @@ Node Parser::mulExpr() {
         else if(tok.type == DIV)
             this->eat(DIV);
 
-        // kinda scuffed but i need pointers until I find a better solution so I am storing nodes in an array
-        this->leftNodes.push_back(node);
-        this->rightNodes.push_back(this->term());
-        node = Node(BinOp(&this->leftNodes[this->leftNodes.size()-1], tok, &this->rightNodes[this->rightNodes.size()-1]));
-        std::cout << "[mulExpr()] : " << node.type << std::endl;
+        BinOp *binop = new BinOp(node, tok, this->term());
+        node = Evaluable(binop);
     }
     return node;
 }
 
-Node Parser::plusExpr() {
-    Node node = this->mulExpr();
+Evaluable Parser::plusExpr() {
+    Evaluable node = this->mulExpr();
     
     while(this->currentToken.type == PLUS || this->currentToken.type == MINUS) {
         Token tok = this->currentToken;
@@ -60,18 +58,14 @@ Node Parser::plusExpr() {
         else if(tok.type == MINUS)
             this->eat(MINUS);
 
-        // kinda scuffed but i need pointers until I find a better solution so I am storing nodes in an array
-        this->leftNodes.push_back(node);
-        this->rightNodes.push_back(this->mulExpr());
-        node = Node(BinOp(&this->leftNodes[this->leftNodes.size()-1], tok, &this->rightNodes[this->rightNodes.size()-1]));
-        std::cout << "[plusExpr()] : " << node.type << std::endl;
+        BinOp *binop = new BinOp(node, tok, this->mulExpr());
+        node = Evaluable(binop);
+        // ill figure out where to delete stuff later cbf rn
     }
-    node.print();
     return node;
 }
 
 void Parser::parse() {
-    float ans = this->plusExpr().evaluate();
-    // std::cout << this->lexer.text << " = " << ans << std::endl;
-    // this->plusExpr().print();
+    Evaluable ans = this->plusExpr();
+    std::cout << this->lexer.text << " = " << BinOp::evaluateNode(ans) << std::endl;
 }
