@@ -1,4 +1,6 @@
 #include "lexer.h"
+#include "AST.h"
+#include <vector>
 
 class Parser {
 public:
@@ -8,9 +10,9 @@ public:
 
     void eat(std::string type);
 
-    float term();
-    float plusExpr();
-    float mulExpr();
+    Evaluable term();
+    Evaluable plusExpr();
+    Evaluable mulExpr();
 
     void parse();
 };
