@@ -14,5 +14,5 @@ public:
     Evaluable plusExpr();
     Evaluable mulExpr();
 
-    void parse();
+    Evaluable AST();
 };

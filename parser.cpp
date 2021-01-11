@@ -65,7 +65,6 @@ Evaluable Parser::plusExpr() {
     return node;
 }
 
-void Parser::parse() {
-    Evaluable ans = this->plusExpr();
-    std::cout << this->lexer.text << " = " << BinOp::evaluateNode(ans) << std::endl;
+Evaluable Parser::AST() {
+    return this->plusExpr();
 }

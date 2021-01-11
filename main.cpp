@@ -1,6 +1,4 @@
-#include "lexer.h"
-#include "types.h"
-#include "parser.h"
+#include "interpreter.h"
 #include <string>
 #include <iostream>
 
@@ -12,6 +10,6 @@ int main() {
         if(input == "") continue;
         Lexer lexer(input);
         Parser parser(lexer);
-        parser.parse();
+        std::cout << lexer.text << " = " << interpret(parser.AST()) << std::endl;
     }
 }
