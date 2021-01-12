@@ -28,11 +28,16 @@ float interpret(Evaluable *node) {
         UnaryOp *unaryPtr = dynamic_cast<UnaryOp*>(node);
         if(unaryPtr->num->type == "unary")
             return interpret(dynamic_cast<UnaryOp*>(unaryPtr->num));
-        else {
+        if(unaryPtr->num->type == "num") {
             // get num from unaryptr
             float value = dynamic_cast<Num*>(unaryPtr->num)->value;
             if(unaryPtr->op == MINUS) return -value;
             else if(unaryPtr->op == PLUS) return value;
+        }
+        if(unaryPtr->num->type == "binop") {
+            BinOp *binopPtr = dynamic_cast<BinOp*>(unaryPtr->num);
+            if(unaryPtr->op == MINUS) return -interpret(binopPtr);
+            else if(unaryPtr->op == PLUS) return interpret(binopPtr);
         }
     }
 }
