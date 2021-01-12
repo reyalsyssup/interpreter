@@ -8,26 +8,24 @@ class BinOp;
 
 class Evaluable {
 public:
-    std::string type;
-    Num *numNode;
-    BinOp *binopNode;
-    Evaluable(Num *num): type("Num"), numNode(num) {};
-    Evaluable(BinOp *binop): type("BinOp"), binopNode(binop) {};
+    std::string type = "eval";
+    Evaluable(std::string type): type(type) {};
     Evaluable() = default;
+    virtual ~Evaluable() = default;
 };
 
-class Num {
+class Num : public Evaluable {
 public:
     float value;
-    Num(Token tok): value(std::stof(tok.value)) {};
+    Num(float value): value(value), Evaluable("num") {};
     Num() = default;
 };
 
-class BinOp {
+class BinOp : public Evaluable {
 public:
     Token op;
-    Evaluable left, right;
-    BinOp(Evaluable left, Token op, Evaluable right):
-        op(op), left(left), right(right) {};
+    Evaluable *left, *right;
+    BinOp(Evaluable *left, Token op, Evaluable *right):
+        op(op), left(left), right(right), Evaluable("binop") {};
     BinOp() = default;
 };

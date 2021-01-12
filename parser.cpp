@@ -18,22 +18,25 @@ void Parser::eat(std::string type) {
     }
 }
 
-Evaluable Parser::term()  {
+Evaluable* Parser::term()  {
     Token tok = this->currentToken;
     if(tok.type == INTEGER) {
         this->eat(INTEGER);
-        Num *num = new Num(tok);
-        return Evaluable(num);
-    } else {
+        // convert num to evaluable pointer
+        Num *num = new Num(std::stof(tok.value));
+        Evaluable *numEvalPtr = num;
+        Num *backtonum = dynamic_cast<Num*>(numEvalPtr);
+        return numEvalPtr;
+    } else if(tok.type == LPAREN) {
         this->eat(LPAREN);
-        Evaluable node = this->plusExpr();
+        Evaluable *node = this->plusExpr();
         this->eat(RPAREN);
         return node;
     }
 }
 
-Evaluable Parser::mulExpr() {
-    Evaluable node = this->term();
+Evaluable* Parser::mulExpr() {
+    Evaluable *node = this->term();
 
     while(this->currentToken.type == MUL || this->currentToken.type == DIV) {
         Token tok = this->currentToken;
@@ -42,14 +45,16 @@ Evaluable Parser::mulExpr() {
         else if(tok.type == DIV)
             this->eat(DIV);
 
-        BinOp *binop = new BinOp(node, tok, this->term());
-        node = Evaluable(binop);
+        // BinOp *binop = ;
+        // ill figure out where to delete stuff later cbf rn
+        Evaluable *binopEvalPtr = new BinOp(node, tok, this->term());
+        node = binopEvalPtr;
     }
     return node;
 }
 
-Evaluable Parser::plusExpr() {
-    Evaluable node = this->mulExpr();
+Evaluable* Parser::plusExpr() {
+    Evaluable *node = this->mulExpr();
     
     while(this->currentToken.type == PLUS || this->currentToken.type == MINUS) {
         Token tok = this->currentToken;
@@ -58,13 +63,14 @@ Evaluable Parser::plusExpr() {
         else if(tok.type == MINUS)
             this->eat(MINUS);
 
-        BinOp *binop = new BinOp(node, tok, this->mulExpr());
-        node = Evaluable(binop);
+        // BinOp *binop = ;
         // ill figure out where to delete stuff later cbf rn
+        Evaluable *binopEvalPtr = new BinOp(node, tok, this->mulExpr());
+        node = binopEvalPtr;
     }
     return node;
 }
 
-Evaluable Parser::AST() {
+Evaluable* Parser::AST() {
     return this->plusExpr();
 }

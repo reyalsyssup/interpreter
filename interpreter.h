@@ -5,18 +5,22 @@
 #include "parser.h"
 #include "lexer.h"
 #include "types.h"
+#include <iostream>
 
-float interpret(Evaluable node) {
-    if(node.type == "Num") return node.numNode->value;
-    else {
-        std::string type = node.binopNode->op.type;
+float interpret(Evaluable *node) {
+    if(node->type == "num") {
+        Num *numptr = dynamic_cast<Num*>(node);
+        return numptr->value;
+    } else {
+        BinOp *binopPtr = dynamic_cast<BinOp*>(node);
+        std::string type = binopPtr->op.type;
         if(type == PLUS)
-            return interpret(node.binopNode->left) + interpret(node.binopNode->right);
+            return interpret(binopPtr->left) + interpret(binopPtr->right);
         if(type == MINUS)
-            return interpret(node.binopNode->left) - interpret(node.binopNode->right);
+            return interpret(binopPtr->left) - interpret(binopPtr->right);
         if(type == MUL)
-            return interpret(node.binopNode->left) * interpret(node.binopNode->right);
+            return interpret(binopPtr->left) * interpret(binopPtr->right);
         if(type == DIV)
-            return interpret(node.binopNode->left) / interpret(node.binopNode->right);
+            return interpret(binopPtr->left) / interpret(binopPtr->right);
     }
 }

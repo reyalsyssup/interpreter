@@ -10,9 +10,9 @@ public:
 
     void eat(std::string type);
 
-    Evaluable term();
-    Evaluable plusExpr();
-    Evaluable mulExpr();
+    Evaluable* term();
+    Evaluable* plusExpr();
+    Evaluable* mulExpr();
 
-    Evaluable AST();
+    Evaluable* AST();
 };
