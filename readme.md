@@ -6,7 +6,7 @@ This is a calculator that can take in an input that is more complex than just `3
 <br>
 It can understand the following symbols:
 
--   Any Integer
+-   Any Integer (positive or negative)
 -   Parentheses
 -   +, -, \*, /
 
@@ -15,6 +15,8 @@ It can understand the following symbols:
 -   8\*9
 -   2\*7+8
 -   7\*5+(5\*(9+2))-7
+-   5 - - - + - (3 + 4) - +2
+-   \-5+7
 
 ## Thanks to the following article
 
