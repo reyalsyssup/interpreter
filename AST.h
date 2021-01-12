@@ -3,9 +3,6 @@
 #include "lexer.h"
 #include "types.h"
 
-class Num;
-class BinOp;
-
 class Evaluable {
 public:
     std::string type = "eval";
