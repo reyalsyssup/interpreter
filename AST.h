@@ -21,6 +21,14 @@ public:
     Num() = default;
 };
 
+class UnaryOp : public Evaluable {
+public:
+    std::string op;
+    Evaluable *num;
+    UnaryOp(std::string op, Evaluable *num): num(num), op(op), Evaluable("unary") {}
+    UnaryOp() = default;
+};
+
 class BinOp : public Evaluable {
 public:
     Token op;

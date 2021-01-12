@@ -25,13 +25,20 @@ Evaluable* Parser::term()  {
         // convert num to evaluable pointer
         Num *num = new Num(std::stof(tok.value));
         Evaluable *numEvalPtr = num;
-        Num *backtonum = dynamic_cast<Num*>(numEvalPtr);
         return numEvalPtr;
     } else if(tok.type == LPAREN) {
         this->eat(LPAREN);
         Evaluable *node = this->plusExpr();
         this->eat(RPAREN);
         return node;
+    } else if(tok.type == MINUS || tok.type == PLUS) {
+        this->eat(tok.type);
+        UnaryOp *unary = new UnaryOp(tok.type, this->term());
+        Evaluable *unaryEvalPtr = unary;
+        return unaryEvalPtr;
+    } else {
+        std::cout << "Error in parser.term()" << std::endl;
+        exit(-1);
     }
 }
 
