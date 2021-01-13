@@ -6,7 +6,6 @@
 #include "lexer.h"
 #include "types.h"
 #include "math.h"
-#include <iostream>
 
 float interpret(Evaluable *node) {
     if(node->type == "num") {
