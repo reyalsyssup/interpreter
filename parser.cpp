@@ -36,6 +36,13 @@ Evaluable* Parser::term()  {
         UnaryOp *unary = new UnaryOp(tok.type, this->term());
         Evaluable *unaryEvalPtr = unary;
         return unaryEvalPtr;
+    } else if(tok.type == WORD && tok.value == "sqrt") {
+        this->eat(WORD);
+        this->eat(LPAREN);
+        Sqrt *sqrt = new Sqrt(this->plusExpr());
+        this->eat(RPAREN);
+        Evaluable *sqrtPtr = sqrt;
+        return sqrtPtr;
     } else {
         std::cout << "Error in parser.term()" << std::endl;
         exit(-1);

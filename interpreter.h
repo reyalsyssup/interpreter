@@ -5,6 +5,7 @@
 #include "parser.h"
 #include "lexer.h"
 #include "types.h"
+#include "math.h"
 #include <iostream>
 
 float interpret(Evaluable *node) {
@@ -39,5 +40,10 @@ float interpret(Evaluable *node) {
             if(unaryPtr->op == MINUS) return -interpret(binopPtr);
             else if(unaryPtr->op == PLUS) return interpret(binopPtr);
         }
+    }
+    if(node->type == "sqrt") {
+        Sqrt *sqrtPtr = dynamic_cast<Sqrt*>(node);
+        float value = interpret(sqrtPtr->num);
+        return sqrt(value);
     }
 }

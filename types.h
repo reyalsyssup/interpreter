@@ -7,3 +7,4 @@
 #define DIV "DIV"
 #define LPAREN "LPAREN"
 #define RPAREN "RPAREN"
+#define WORD "WORD"

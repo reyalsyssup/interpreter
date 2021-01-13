@@ -34,3 +34,9 @@ public:
         op(op), left(left), right(right), Evaluable("binop") {};
     BinOp() = default;
 };
+
+class Sqrt : public Evaluable {
+public:
+    Evaluable *num;
+    Sqrt(Evaluable *num): num(num), Evaluable("sqrt") {}
+};

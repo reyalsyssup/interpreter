@@ -22,6 +22,6 @@ public:
     void advance(int amount=1);
 
     Token integer();
-
     Token getNextToken();
+    Token word();
 };

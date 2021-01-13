@@ -25,6 +25,15 @@ Token Lexer::integer() {
     return Token(INTEGER, strNum);
 }
 
+Token Lexer::word() {
+    std::string word = "";
+    while(isalpha(this->currentChar) && !this->curCharNone) {
+        word += this->currentChar;
+        this->advance();
+    }
+    return Token(WORD, word);
+}
+
 Token Lexer::getNextToken() {
     while(!this->curCharNone) {
         char currentChar = this->currentChar;
@@ -34,6 +43,9 @@ Token Lexer::getNextToken() {
             this->advance(1);
             continue;
         }
+
+        if(isalpha(currentChar))
+            return this->word();
 
         if(isdigit(currentChar))
             return this->integer();
