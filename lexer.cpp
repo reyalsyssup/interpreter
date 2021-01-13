@@ -22,6 +22,14 @@ Token Lexer::integer() {
         strNum += currentChar;
         this->advance();
     }
+    if(this->currentChar == '.') {
+        strNum += '.';
+        this->advance();
+        while(!this->curCharNone && isdigit(this->currentChar)) {
+            strNum += currentChar;
+            this->advance();
+        }
+    }
     return Token(INTEGER, strNum);
 }
 
