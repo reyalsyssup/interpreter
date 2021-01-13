@@ -6,7 +6,8 @@ This is a calculator that can take in an input that is more complex than just `3
 <br>
 It can understand the following symbols:
 
--   Any Integer (positive or negative)
+-   Any decimal or whole number (positive or negative)
+-   `sqrt(EXPRESSION_HERE)`
 -   Parentheses
 -   +, -, \*, /
 
@@ -17,6 +18,8 @@ It can understand the following symbols:
 -   7\*5+(5\*(9+2))-7
 -   5 - - - + - (3 + 4) - +2
 -   \-5+7
+-   sqrt(25)
+-   5.5+sqrt(87/(5+sqrt(42-0.76)))
 
 ## Thanks to the following article
 
