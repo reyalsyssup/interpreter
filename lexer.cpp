@@ -89,5 +89,5 @@ Token Lexer::getNextToken() {
         exit(-1);
     }
 
-    return Token(EOF, EOF);
+    return Token(_EOF, _EOF);
 }
