@@ -2,6 +2,7 @@
 
 #include "lexer.h"
 #include "types.h"
+#include <memory>
 
 class Evaluable {
 public:
@@ -21,22 +22,22 @@ public:
 class UnaryOp : public Evaluable {
 public:
     std::string op;
-    Evaluable *num;
-    UnaryOp(std::string op, Evaluable *num): num(num), op(op), Evaluable("unary") {}
+    std::shared_ptr<Evaluable> num;
+    UnaryOp(std::string op, std::shared_ptr<Evaluable> num): num(num), op(op), Evaluable("unary") {}
     UnaryOp() = default;
 };
 
 class BinOp : public Evaluable {
 public:
     Token op;
-    Evaluable *left, *right;
-    BinOp(Evaluable *left, Token op, Evaluable *right):
+    std::shared_ptr<Evaluable> left, right;
+    BinOp(std::shared_ptr<Evaluable> left, Token op, std::shared_ptr<Evaluable> right):
         op(op), left(left), right(right), Evaluable("binop") {};
     BinOp() = default;
 };
 
 class Sqrt : public Evaluable {
 public:
-    Evaluable *num;
-    Sqrt(Evaluable *num): num(num), Evaluable("sqrt") {}
+    std::shared_ptr<Evaluable> num;
+    Sqrt(std::shared_ptr<Evaluable> num): num(num), Evaluable("sqrt") {}
 };

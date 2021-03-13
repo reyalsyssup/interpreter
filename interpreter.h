@@ -7,13 +7,13 @@
 #include "types.h"
 #include "math.h"
 
-float interpret(Evaluable *node) {
+float interpret(std::shared_ptr<Evaluable> node) {
     if(node->type == "num") {
-        Num *numptr = dynamic_cast<Num*>(node);
+        auto numptr = std::dynamic_pointer_cast<Num>(node);
         return numptr->value;
     }
     if(node->type == "binop") {
-        BinOp *binopPtr = dynamic_cast<BinOp*>(node);
+        auto binopPtr = std::dynamic_pointer_cast<BinOp>(node);
         std::string type = binopPtr->op.type;
         if(type == PLUS)
             return interpret(binopPtr->left) + interpret(binopPtr->right);
@@ -25,23 +25,25 @@ float interpret(Evaluable *node) {
             return interpret(binopPtr->left) / interpret(binopPtr->right);
     }
     if(node->type == "unary") {
-        UnaryOp *unaryPtr = dynamic_cast<UnaryOp*>(node);
-        if(unaryPtr->num->type == "unary")
-            return interpret(dynamic_cast<UnaryOp*>(unaryPtr->num));
+        auto unaryPtr = std::dynamic_pointer_cast<UnaryOp>(node);
+        if(unaryPtr->num->type == "unary") {
+            std::shared_ptr<Evaluable> evalPtr = std::dynamic_pointer_cast<UnaryOp>(unaryPtr->num);
+            return interpret(evalPtr);
+        }
         if(unaryPtr->num->type == "num") {
             // get num from unaryptr
-            float value = dynamic_cast<Num*>(unaryPtr->num)->value;
+            float value = std::dynamic_pointer_cast<Num>(unaryPtr->num)->value;
             if(unaryPtr->op == MINUS) return -value;
             else if(unaryPtr->op == PLUS) return value;
         }
         if(unaryPtr->num->type == "binop") {
-            BinOp *binopPtr = dynamic_cast<BinOp*>(unaryPtr->num);
+            auto binopPtr = std::dynamic_pointer_cast<BinOp>(unaryPtr->num);
             if(unaryPtr->op == MINUS) return -interpret(binopPtr);
             else if(unaryPtr->op == PLUS) return interpret(binopPtr);
         }
     }
     if(node->type == "sqrt") {
-        Sqrt *sqrtPtr = dynamic_cast<Sqrt*>(node);
+        auto sqrtPtr = std::dynamic_pointer_cast<Sqrt>(node);
         float value = interpret(sqrtPtr->num);
         return sqrt(value);
     }

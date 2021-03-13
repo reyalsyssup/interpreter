@@ -3,6 +3,7 @@
 #include "AST.h"
 #include <string>
 #include <iostream>
+#include <memory>
 
 Parser::Parser(Lexer lexer) {
     this->lexer = lexer;
@@ -18,30 +19,30 @@ void Parser::eat(std::string type) {
     }
 }
 
-Evaluable* Parser::term()  {
+std::shared_ptr<Evaluable> Parser::term()  {
     Token tok = this->currentToken;
     if(tok.type == INTEGER) {
         this->eat(INTEGER);
         // convert num to evaluable pointer
-        Num *num = new Num(std::stof(tok.value));
-        Evaluable *numEvalPtr = num;
-        return numEvalPtr;
+        std::shared_ptr<Num> num = std::make_shared<Num>(Num(std::stof(tok.value)));
+        // Evaluable *numEvalPtr = num;
+        return num;
     } else if(tok.type == LPAREN) {
         this->eat(LPAREN);
-        Evaluable *node = this->plusExpr();
+        auto node = this->plusExpr();
         this->eat(RPAREN);
         return node;
     } else if(tok.type == MINUS || tok.type == PLUS) {
         this->eat(tok.type);
-        UnaryOp *unary = new UnaryOp(tok.type, this->term());
-        Evaluable *unaryEvalPtr = unary;
+        std::shared_ptr<UnaryOp> unary(new UnaryOp(tok.type, this->term()));
+        std::shared_ptr<Evaluable> unaryEvalPtr = unary;
         return unaryEvalPtr;
     } else if(tok.type == WORD && tok.value == "sqrt") {
         this->eat(WORD);
         this->eat(LPAREN);
-        Sqrt *sqrt = new Sqrt(this->plusExpr());
+        std::shared_ptr<Sqrt> sqrt(new Sqrt(this->plusExpr()));
         this->eat(RPAREN);
-        Evaluable *sqrtPtr = sqrt;
+        std::shared_ptr<Evaluable> sqrtPtr = sqrt;
         return sqrtPtr;
     } else {
         std::cout << "Error in parser.term()" << std::endl;
@@ -49,8 +50,8 @@ Evaluable* Parser::term()  {
     }
 }
 
-Evaluable* Parser::mulExpr() {
-    Evaluable *node = this->term();
+std::shared_ptr<Evaluable> Parser::mulExpr() {
+    auto node = this->term();
 
     while(this->currentToken.type == MUL || this->currentToken.type == DIV) {
         Token tok = this->currentToken;
@@ -58,17 +59,15 @@ Evaluable* Parser::mulExpr() {
             this->eat(MUL);
         else if(tok.type == DIV)
             this->eat(DIV);
-
-        // BinOp *binop = ;
-        // ill figure out where to delete stuff later cbf rn
-        Evaluable *binopEvalPtr = new BinOp(node, tok, this->term());
+            
+        std::shared_ptr<Evaluable> binopEvalPtr = std::make_shared<BinOp>(BinOp(node, tok, this->term()));
         node = binopEvalPtr;
     }
     return node;
 }
 
-Evaluable* Parser::plusExpr() {
-    Evaluable *node = this->mulExpr();
+std::shared_ptr<Evaluable> Parser::plusExpr() {
+    std::shared_ptr<Evaluable> node = this->mulExpr();
     
     while(this->currentToken.type == PLUS || this->currentToken.type == MINUS) {
         Token tok = this->currentToken;
@@ -76,15 +75,12 @@ Evaluable* Parser::plusExpr() {
             this->eat(PLUS);
         else if(tok.type == MINUS)
             this->eat(MINUS);
-
-        // BinOp *binop = ;
-        // ill figure out where to delete stuff later cbf rn
-        Evaluable *binopEvalPtr = new BinOp(node, tok, this->mulExpr());
+        std::shared_ptr<Evaluable> binopEvalPtr = std::make_shared<BinOp>(BinOp(node, tok, this->mulExpr()));
         node = binopEvalPtr;
     }
     return node;
 }
 
-Evaluable* Parser::AST() {
+std::shared_ptr<Evaluable> Parser::AST() {
     return this->plusExpr();
 }

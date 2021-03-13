@@ -10,9 +10,9 @@ public:
 
     void eat(std::string type);
 
-    Evaluable* term();
-    Evaluable* plusExpr();
-    Evaluable* mulExpr();
+    std::shared_ptr<Evaluable> term();
+    std::shared_ptr<Evaluable> plusExpr();
+    std::shared_ptr<Evaluable> mulExpr();
 
-    Evaluable* AST();
+    std::shared_ptr<Evaluable> AST();
 };
