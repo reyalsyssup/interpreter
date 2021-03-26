@@ -11,6 +11,7 @@ public:
     void eat(std::string type);
 
     std::shared_ptr<Evaluable> term();
+    std::shared_ptr<Evaluable> power();
     std::shared_ptr<Evaluable> plusExpr();
     std::shared_ptr<Evaluable> mulExpr();
 
