@@ -45,13 +45,22 @@ std::shared_ptr<Evaluable> Parser::term()  {
         std::shared_ptr<Evaluable> sqrtPtr = sqrt;
         return sqrtPtr;
     } else {
-        std::cout << "Error in parser.term()" << std::endl;
+        std::cout << "Unexpected token of type '" << this->currentToken.type << "'" << std::endl;
         exit(-1);
     }
 }
 
-std::shared_ptr<Evaluable> Parser::mulExpr() {
+std::shared_ptr<Evaluable> Parser::power() {
     auto node = this->term();
+    if(this->currentToken.type == CARROT) {
+        this->eat(CARROT);
+        node = std::make_shared<Carrot>(Carrot(node, this->term()));
+    }
+    return node;
+}
+
+std::shared_ptr<Evaluable> Parser::mulExpr() {
+    auto node = this->power();
 
     while(this->currentToken.type == MUL || this->currentToken.type == DIV) {
         Token tok = this->currentToken;
