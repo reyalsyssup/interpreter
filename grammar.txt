@@ -1,3 +1,4 @@
 plusExpr : mulExpr ((PLUS | MINUS) mulExpr)*
-mulExpr : term ((MUL | DIV) term)*
+mulExpr : power ((MUL | DIV) power)*
+power : term (CARROT term)*
 term : NUMBER | LPAREN plusExpr RPAREN
