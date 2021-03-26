@@ -1,4 +1,5 @@
-a.exe
+*.exe
+*.out
 .vscode
 build
 build.zip
