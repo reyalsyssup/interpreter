@@ -41,3 +41,10 @@ public:
     std::shared_ptr<Evaluable> num;
     Sqrt(std::shared_ptr<Evaluable> num): num(num), Evaluable("sqrt") {}
 };
+
+class Carrot : public Evaluable {
+public:
+    std::shared_ptr<Evaluable> num, power;
+    Carrot(std::shared_ptr<Evaluable> num, std::shared_ptr<Evaluable> power):
+        num(num), power(power), Evaluable("carrot") {}
+};
