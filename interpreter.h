@@ -6,6 +6,7 @@
 #include "lexer.h"
 #include "types.h"
 #include "math.h"
+#include <iostream>
 
 float interpret(std::shared_ptr<Evaluable> node) {
     if(node->type == "num") {
@@ -46,5 +47,10 @@ float interpret(std::shared_ptr<Evaluable> node) {
         auto sqrtPtr = std::dynamic_pointer_cast<Sqrt>(node);
         float value = interpret(sqrtPtr->num);
         return sqrt(value);
+    }
+    if(node->type == "carrot") {
+        auto carrotPtr = std::dynamic_pointer_cast<Carrot>(node);
+        float value = pow(interpret(carrotPtr->num), interpret(carrotPtr->power));
+        return value;
     }
 }
