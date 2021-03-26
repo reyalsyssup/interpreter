@@ -8,3 +8,4 @@
 #define LPAREN "LPAREN"
 #define RPAREN "RPAREN"
 #define WORD "WORD"
+#define CARROT "CARROT"
