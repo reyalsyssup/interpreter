@@ -83,6 +83,10 @@ Token Lexer::getNextToken() {
             this->advance(1);
             return Token(RPAREN, ")");
         }
+        if(currentChar == '^') {
+            this->advance(1);
+            return Token(CARROT, "^");
+        }
 
         // if we got here an error occured
         std::cout << "Unexpected character '" << currentChar << "' at position: " << this->pos << std::endl;
