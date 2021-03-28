@@ -53,4 +53,11 @@ float interpret(std::shared_ptr<Evaluable> node) {
         float value = pow(interpret(carrotPtr->num), interpret(carrotPtr->power));
         return value;
     }
+    if(node->type == "factorial") {
+        auto factorialPtr = std::dynamic_pointer_cast<Factorial>(node);
+        float value = 1;
+        for(int i = 1; i <= interpret(factorialPtr->num); i++)
+            value *= i;
+        return value;
+    }
 }
