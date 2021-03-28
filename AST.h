@@ -14,8 +14,8 @@ public:
 
 class Num : public Evaluable {
 public:
-    float value;
-    Num(float value): value(value), Evaluable("num") {};
+    long double value;
+    Num(long double value): value(value), Evaluable("num") {};
     Num() = default;
 };
 

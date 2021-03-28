@@ -8,7 +8,7 @@
 #include "math.h"
 #include <iostream>
 
-float interpret(std::shared_ptr<Evaluable> node) {
+long double interpret(std::shared_ptr<Evaluable> node) {
     if(node->type == "num") {
         auto numptr = std::dynamic_pointer_cast<Num>(node);
         return numptr->value;
@@ -33,7 +33,7 @@ float interpret(std::shared_ptr<Evaluable> node) {
         }
         if(unaryPtr->num->type == "num") {
             // get num from unaryptr
-            float value = std::dynamic_pointer_cast<Num>(unaryPtr->num)->value;
+            long double value = std::dynamic_pointer_cast<Num>(unaryPtr->num)->value;
             if(unaryPtr->op == MINUS) return -value;
             else if(unaryPtr->op == PLUS) return value;
         }
@@ -45,17 +45,17 @@ float interpret(std::shared_ptr<Evaluable> node) {
     }
     if(node->type == "sqrt") {
         auto sqrtPtr = std::dynamic_pointer_cast<Sqrt>(node);
-        float value = interpret(sqrtPtr->num);
+        long double value = interpret(sqrtPtr->num);
         return sqrt(value);
     }
     if(node->type == "carrot") {
         auto carrotPtr = std::dynamic_pointer_cast<Carrot>(node);
-        float value = pow(interpret(carrotPtr->num), interpret(carrotPtr->power));
+        long double value = pow(interpret(carrotPtr->num), interpret(carrotPtr->power));
         return value;
     }
     if(node->type == "factorial") {
         auto factorialPtr = std::dynamic_pointer_cast<Factorial>(node);
-        float value = 1;
+        long double value = 1;
         for(int i = 1; i <= interpret(factorialPtr->num); i++)
             value *= i;
         return value;
