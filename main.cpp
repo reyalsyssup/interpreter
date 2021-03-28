@@ -10,6 +10,7 @@ int main() {
         if(input == "") continue;
         Lexer lexer(input);
         Parser parser(lexer);
-        std::cout << lexer.text << " = " << interpret(parser.AST()) << std::endl;
+        long double value = interpret(parser.AST());
+        std::cout << lexer.text << " = " << value << std::endl;
     }
 }
