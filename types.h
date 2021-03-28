@@ -9,3 +9,4 @@
 #define RPAREN "RPAREN"
 #define WORD "WORD"
 #define CARROT "CARROT"
+#define FACTORIAL "FACTORIAL"
