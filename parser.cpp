@@ -26,6 +26,9 @@ std::shared_ptr<Evaluable> Parser::term()  {
         // convert num to evaluable pointer
         std::shared_ptr<Num> num = std::make_shared<Num>(Num(std::stof(tok.value)));
         // Evaluable *numEvalPtr = num;
+        // factorial
+        if(this->currentToken.type == FACTORIAL)
+            return std::make_shared<Factorial>(Factorial(num));
         return num;
     } else if(tok.type == LPAREN) {
         this->eat(LPAREN);
