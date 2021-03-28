@@ -48,3 +48,9 @@ public:
     Carrot(std::shared_ptr<Evaluable> num, std::shared_ptr<Evaluable> power):
         num(num), power(power), Evaluable("carrot") {}
 };
+
+class Factorial : public Evaluable {
+public:
+    std::shared_ptr<Evaluable> num;
+    Factorial(std::shared_ptr<Evaluable> num): num(num), Evaluable("factorial") {}
+};
